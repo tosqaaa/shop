@@ -7,6 +7,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('shop/', include(arg=('shop.urls','shop'), namespace='shop')),
+    path('cart/', include(arg=('cart.urls','cart'), namespace='cart')),
+    
 ]
 
 if settings.DEBUG:
