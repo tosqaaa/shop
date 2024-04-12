@@ -1,17 +1,21 @@
 from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
+from mptt.models import TreeForeignKey, MPTTModel
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     title = models.CharField(verbose_name='Название',
                              max_length=255, db_index=True)
-    parent = models.ForeignKey(
-        verbose_name='Родительская категория', to='self', on_delete=models.CASCADE, null=True, related_name='children', blank=True)
+    parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True,
+                            related_name='children', db_index=True, verbose_name='Родительская категория')
     slug = models.SlugField(
         verbose_name='URL', max_length=255, unique=True, null=False, editable=True)
     created_at = models.DateTimeField(
         verbose_name='Дата создания', auto_now_add=True)
+    
+    class MPTTMeta:
+        order_instertion_by = ['title']
 
     class Meta:
         unique_together = (['slug', 'parent'])
@@ -19,20 +23,15 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        full_path = [self.title]
-        k = self.parent
-        while k is not None:
-            full_path.append(k.title)
-            k = k.parent
-        return '->'.join(full_path[::-1])
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = self.slugify(self.title)
+            self.slug = slugify(self.title)
         return super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("category", kwargs={"pk": self.pk})
+        return reverse("products_category", kwargs={'slug': self.slug})
 
 
 class Product(models.Model):
@@ -42,8 +41,7 @@ class Product(models.Model):
     brand = models.CharField(verbose_name='Бренд', max_length=255)
     price = models.DecimalField(
         verbose_name='Цена', max_digits=7, decimal_places=2, default=0.00)
-    category = models.ForeignKey(
-        verbose_name='Категория', to=Category, on_delete=models.CASCADE, related_name='products')
+    category = TreeForeignKey(Category, on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
     slug = models.SlugField(
         verbose_name='URL', max_length=255, unique=True, null=False, editable=True)
     created_at = models.DateTimeField(
@@ -63,7 +61,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = self.slugify(self.title)
+            self.slug = slugify(self.title)
         return super(Product, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

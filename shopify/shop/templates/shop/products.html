@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load shop_tags %}
+{% block CATEGORIES %}
+{% list_categories %}
+{% endblock %}
+{% block CONTENT %}
+  {% for product in products %}
+    <div class="card text-center">
+      <div class="card-header">
+        <a href="{% url 'shop:product_category' product.category.slug %}">{{ product.category.title }}</a>
+      </div>
+      <div class="card-body">
+        <img src="{{ product.image.url }}" alt="Изображение" />
+        <h5 class="card-title">{{ product.title }}</h5>
+        <p class="card-text">{{ product.brand }}</p>
+        <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+        <p class="card-text">Цена: {{ product.price }}</p>
+        <a href="{% url 'shop:product_detail' product.slug %}" class="btn btn-primary">Подробнее</a>
+      </div>
+      <div class="card-footer text-body-secondary">Обновлено: {{ product.updated_at|date:'d.m.Y' }}</div>
+    </div>
+  {% endfor %}
+{% endblock %}

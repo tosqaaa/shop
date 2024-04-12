@@ -1,0 +1,15 @@
+{% load mptt_tags %}
+<div>
+    <div>
+      <ul class='list-group'>
+        {% recursetree categories %}
+        <li class = "list-group-item">
+          <a href="{% url 'shop:product_category' node.slug %}">{{ node.title }}</a>
+          {% if not node.is_leaf_node %}
+            <ul class="children">{{ children }}</ul>
+          {% endif %}
+        </li>
+        {% endrecursetree %}
+      </ul>
+    </div>
+  </div>
