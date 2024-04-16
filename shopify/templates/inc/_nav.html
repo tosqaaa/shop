@@ -1,23 +1,44 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'shop:products' %}">Магазин</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'shop:products' %}">Магазин</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'cart:cart_view' %}">
+            Корзина
+            <span id="lblCartCount">
+              ({% with cart_qty=cart|length %}
+                {% if cart_qty > 0 %}
+                  {{ cart_qty }}
+                {% else %}
+                  0
+                {% endif %}
+              {% endwith %})
+            </span>
+          </a>
+        </li>
+
+        {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{%url 'cart:cart_view'%}">Корзина</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'account:home' %}">Профиль</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Профиль</a>
+            <form action="{% url 'account:logout' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-outline-primary" type="submit">Выйти</button>
+            </form>
           </li>
-          
-        </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'account:login' %}">Войти</a>
+          </li>
+        {% endif %}
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
-  </nav>
+  </div>
+</nav>

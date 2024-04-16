@@ -76,7 +76,7 @@
                                 <button type="button" id="add-button" value="{{product.id}}"
                                     class="btn btn-secondary btn-sm">
 
-                                    Add to cart
+                                    Добавить в корзину
 
                                 </button>
 
@@ -102,7 +102,7 @@
 </div>
 
 <script>
-    $(document).on('click', '#add-button', function (e) {
+     $(document).on('click', '#add-button', function (e) {
         e.preventDefault();
 
         $.ajax({
@@ -120,6 +120,8 @@
                 add_button.disabled = true
                 add_button.innerText = "Added to cart"
                 add_button.className = "btn btn-success btn-sm"
+
+                location.reload()
 
             },
             error: function (error) {

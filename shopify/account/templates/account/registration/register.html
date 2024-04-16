@@ -1,0 +1,10 @@
+{%extends 'base.html'%}
+{%block CONTENT%}
+<h2>Создать аккаунт.</h2>
+<form method="post">
+    {{user_form.as_p}}
+    {%csrf_token%}
+    <button type="submit", class="btn btn-primary">Зарегистрироваться.</button>
+</form>
+<p>Есть аккаунт? <a href="{%url 'account:login'%}">Войти</a>.</p>
+{%endblock%}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block CONTENT %}
+  <br />
+  <div class="container bg-li shadow-md p-3">
+    <h4>Добро пожаловать, {{ user.username }}!</h4>
+    <img src="{{profile.photo.url}}" alt="Фото профиля" width="300" height="auto">
+
+    <hr />
+
+    <h6>Доступные действия</h6>
+
+    <div style="display: flex; align-items: center;">
+      <form action="{% url 'account:logout' %}" method="post">
+        {% csrf_token %}
+        <a href="{% url 'account:logout' %}"><button class="btn btn-primary">Выйти</button></a>
+      </form>
+
+      <a href="{% url 'account:edit' %}"><button class="btn btn-success">Управление профилем</button></a>
+
+      <a href="{% url 'account:delete' %}"><button class="btn btn-warning">Удалить аккаунт</button></a>
+      <a href="{% url 'account:password_change' %}"><button class="btn btn-info">Сменить пароль</button></a>
+
+    </div>
+  </div>
+{% endblock %}
