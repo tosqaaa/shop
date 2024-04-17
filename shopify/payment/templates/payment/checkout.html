@@ -1,0 +1,102 @@
+{% include 'base.html' %}
+
+{% load static %}
+
+{% block CONTENT %}
+  <style>
+    body {
+      background-color: gray;
+    }
+  </style>
+
+  <body>
+    <br />
+
+    <div class="container bg-white shadow-md p-5" style="width:500px; border-radius:20px;">
+      <form id="form" action="{% url 'payment:complete-order' %}" method="post">
+        <div>
+          <h3><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Подтвердите свой заказ</h3>
+
+          <p>Пожалуйста, заполните форму ниже.</p>
+
+          <hr />
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control validate" id="name" type="text" placeholder="Имя*" autocomplete="off" value="{{ shipping_address.user.username }}" required />
+          </div>
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control validate" id="email" type="email" placeholder="Email*" autocomplete="off" value="{{ shipping_address.email }}" required />
+          </div>
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control validate" id="address" type="text" placeholder="Адрес*" autocomplete="off" value="{{ shipping_address.address }}" required />
+          </div>
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control validate" id="city" type="text" placeholder="Город*" autocomplete="off" value="{{ shipping_address.city }}" required />
+          </div>
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control" id="country" type="text" placeholder="Страна" autocomplete="off" value="{{ shipping_address.country }}" />
+          </div>
+
+          <br />
+
+          <div class="form-field">
+            <input class="form-control" id="zipcode" type="text" placeholder="Почтовый индекс" autocomplete="off" value="{{ shipping_address.zip_code }}" />
+          </div>
+        </div>
+
+        <br />
+        {% csrf_token %}
+
+        {% comment %} <button id="complete-order-stripe" type="submit" class="btn btn-primary navbar-btn text-white" name="stripe-payment" value="stripe-payment">&nbsp; Pay with Stripe</button>
+        <button id="complete-order-yookassa" type="submit" class="btn btn-primary navbar-btn text-white" name="yookassa-payment" value="yookassa-payment">&nbsp; Pay with YooKassa</button> {% endcomment %}
+
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-success btn-md text-bg-light mt-4">Подтвердить заказ</button>
+        </div>
+      </form>
+    </div>
+
+    <br />
+  </body>
+
+  <script>
+    $(document).on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "payment:complete-order" %}',
+            data: {
+                'action': 'payment',
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'name': $('#name').val(),
+                'email': $('#email').val(),
+                'address': $('#address').val(),
+                'city': $('#city').val(),
+                'country': $('#country').val(),
+                'zipcode': $('#zipcode').val()
+            },
+            success: function(data) {
+                window.location.href = '{% url "payment:payment-success" %}'
+            },
+            error: function(error) {
+                window.location.href = '{% url "payment:payment-fail" %}'
+            }
+        })
+    })
+  </script>
+{% endblock %}

@@ -34,6 +34,5 @@ urlpatterns = [
     path('register/', register, name='register'),
 
     # редактирования профиля
-    path('edit/', edit, name='edit'),
     path('delete/', delete, name='delete'),
 ]
