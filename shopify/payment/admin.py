@@ -18,7 +18,7 @@ class ShippingAddressAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['user', 'amount', 'created', 'updated', 'paid', 'discount']
-    fields = ['user', 'shipping_address', 'amount', 'created', 'updated', 'paid', 'discount', 'items']
+    fields = ['user', 'shipping_address', 'amount', 'created', 'updated', 'paid', 'discount']
     search_fields = ['user__username', 'amount', 'created', 'updated', 'paid', 'discount']
     list_filter = ['user', 'created', 'updated', 'paid']
     readonly_fields = ['created', 'updated']

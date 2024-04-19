@@ -116,12 +116,13 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# User settings
 LOGIN_REDIRECT_URL = 'account:home'
 LOGIN_URL = 'account:login'
 LOGOUT_URL = 'account:logout'
 LOGOUT_REDIRECT_URL = 'account:home'
 
-
+# Crispy forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -136,3 +137,12 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
+
+# Stripe
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_API_VERSION = os.environ.get('STRIPE_API_VERSION')
+
+# Youkassa
+YOOKASSA_SECRET_KEY = os.environ.get('YOOKASSA_SECRET_KEY')
+YOOKASSA_SHOP_ID = os.environ.get('YOOKASSA_SHOP_ID')
